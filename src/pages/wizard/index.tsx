@@ -28,6 +28,7 @@ export function TableCreatorWizard() {
 
   const handleColumnCountSubmit = (count: number) => {
     setColumnCount(count);
+    console.log(columnCount);
     // Initialize columns config with empty values
     setColumnsConfig(
       Array(count)

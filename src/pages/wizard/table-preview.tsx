@@ -59,6 +59,7 @@ export function TablePreview({ columns }: TablePreviewProps) {
 
   // Helper to render action button/link/icon
   const renderAction = (column: ColumnConfig, rowId: string) => {
+    console.log(rowId);
     const getActionLabel = () => {
       if (column.actionType === "custom" && column.customActionLabel) {
         return column.customActionLabel;
