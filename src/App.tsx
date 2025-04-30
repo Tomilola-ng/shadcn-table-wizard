@@ -7,6 +7,7 @@ import HomePage from "./pages/Home";
 import RouteSaver from "./components/reusable/LastRoute";
 // CSS Imports
 import "./App.css";
+import { TableCreatorWizard } from "./pages/wizard";
 
 function App() {
   const lastRoute = localStorage.getItem("lastRoute");
@@ -15,6 +16,7 @@ function App() {
       <RouteSaver>
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/wizard" element={<TableCreatorWizard />} />
           {lastRoute ? (
             <Route path="*" element={<Navigate to={lastRoute} replace />} />
           ) : (
