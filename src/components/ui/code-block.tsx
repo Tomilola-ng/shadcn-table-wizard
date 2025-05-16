@@ -1,8 +1,14 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React from "react";
 
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import type { ComponentType } from "react";
+
+const TypedSyntaxHighlighter =
+  SyntaxHighlighter as unknown as ComponentType<any>;
+
 import { atomDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { IconCheck, IconCopy } from "@tabler/icons-react";
 
@@ -87,7 +93,7 @@ export const CodeBlock = ({
           </div>
         )}
       </div>
-      <SyntaxHighlighter
+      <TypedSyntaxHighlighter
         language={activeLanguage}
         style={atomDark}
         customStyle={{
@@ -98,7 +104,7 @@ export const CodeBlock = ({
         }}
         wrapLines={true}
         showLineNumbers={true}
-        lineProps={(lineNumber) => ({
+        lineProps={(lineNumber: number) => ({
           style: {
             backgroundColor: activeHighlightLines.includes(lineNumber)
               ? "rgba(255,255,255,0.1)"
@@ -110,7 +116,7 @@ export const CodeBlock = ({
         PreTag="div"
       >
         {String(activeCode)}
-      </SyntaxHighlighter>
+      </TypedSyntaxHighlighter>
     </div>
   );
 };
