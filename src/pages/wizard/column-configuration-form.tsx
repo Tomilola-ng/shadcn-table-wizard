@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -13,7 +15,8 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
-import { Textarea } from "@/components/ui/textarea";
+import { TagsInput } from "@/components/ui/tags-input";
+
 import { ColumnConfig, DataType } from "@/types";
 import { toast } from "sonner";
 
@@ -29,6 +32,7 @@ export function ColumnConfigurationForm({
   onBack,
 }: ColumnConfigurationFormProps) {
   const [config, setConfig] = useState<ColumnConfig[]>(columns);
+  const [enumValue, setEnumValue] = useState<string[]>([]);
 
   const updateColumn = (index: number, updates: Partial<ColumnConfig>) => {
     const newConfig = [...config];
@@ -87,15 +91,6 @@ export function ColumnConfigurationForm({
     onSubmit(config);
   };
 
-  const parseEnumOptions = (index: number, optionsText: string) => {
-    const options = optionsText
-      .split(",")
-      .map((opt) => opt.trim())
-      .filter((opt) => opt);
-
-    updateColumn(index, { options });
-  };
-
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="space-y-4">
@@ -150,12 +145,15 @@ export function ColumnConfigurationForm({
                     <Label htmlFor={`column-${index}-options`}>
                       Enum Options
                     </Label>
-                    <Textarea
+                    <TagsInput
+                      value={enumValue}
+                      onValueChange={(val) => {
+                        setEnumValue(val);
+                        updateColumn(index, { options: val });
+                      }}
+                      placeholder="Enter options then press enter (e.g., Active, Pending, Completed)"
+                      className="w-full"
                       id={`column-${index}-options`}
-                      placeholder="Enter options separated by commas (e.g., Active, Pending, Completed)"
-                      value={column.options?.join(", ") || ""}
-                      onChange={(e) => parseEnumOptions(index, e.target.value)}
-                      className="min-h-[80px]"
                     />
                   </div>
 
@@ -197,6 +195,7 @@ export function ColumnConfigurationForm({
                         <SelectItem value="$">$ (Dollar)</SelectItem>
                         <SelectItem value="€">€ (Euro)</SelectItem>
                         <SelectItem value="£">£ (Pound)</SelectItem>
+                        <SelectItem value="₦">₦ (Naira)</SelectItem>
                         <SelectItem value="¥">¥ (Yen/Yuan)</SelectItem>
                         <SelectItem value="₹">₹ (Rupee)</SelectItem>
                       </SelectContent>
