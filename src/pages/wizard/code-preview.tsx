@@ -1,15 +1,14 @@
-import { Button } from "@/components/ui/button";
-import { useState } from "react";
-import { ColumnConfig } from "@/types";
 import { toast } from "sonner";
+
+import { CodeBlock } from "@/components/ui/code-block";
+
+import { ColumnConfig } from "@/types";
 
 interface CodePreviewProps {
   columns: ColumnConfig[];
 }
 
 export function CodePreview({ columns }: CodePreviewProps) {
-  const [copied, setCopied] = useState(false);
-
   // Helper to generate TypeScript interfaces
   const generateTypeDefinition = (columns: ColumnConfig[]) => {
     const typeProperties = columns
@@ -183,7 +182,7 @@ export function CodePreview({ columns }: CodePreviewProps) {
     const actionHandlers = generateActionHandlers(columns);
 
     return `// Table.tsx
-import { ColumnDef } from "@tanstack/react-table"
+    // "use client"
 ${imports}
 
 ${typeDefinition}
@@ -249,8 +248,8 @@ export function DataTable({ data }: { data: Data[] }) {
   // Generate imports section
   const generateImports = () => {
     const imports = [
+      'import { useReactTable, getCoreRowModel, flexRender, ColumnDef } from "@tanstack/react-table"',
       'import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"',
-      'import { useReactTable, getCoreRowModel, flexRender } from "@tanstack/react-table"',
     ];
 
     // Check for special column types that need additional imports
@@ -326,31 +325,9 @@ export function DataTable({ data }: { data: Data[] }) {
 
   const codeSnippet = generateFullCodeSnippet();
 
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(codeSnippet).then(() => {
-      setCopied(true);
-      toast.success("Copied to clipboard!");
-      setTimeout(() => setCopied(false), 2000);
-    });
-  };
-
   return (
-    <div className="relative">
-      <div className="absolute top-2 right-2">
-        <Button
-          size="sm"
-          variant="outline"
-          onClick={copyToClipboard}
-          className="text-xs"
-        >
-          {copied ? "Copied!" : "Copy Code"}
-        </Button>
-      </div>
-      <div className="p-4 bg-zinc-950 text-zinc-50 rounded-md overflow-auto max-h-[500px]">
-        <pre className="text-sm">
-          <code>{codeSnippet}</code>
-        </pre>
-      </div>
+    <div className="max-w-3xl mx-auto w-full">
+      <CodeBlock language="tsx" filename="new-table.tsx" code={codeSnippet} />
     </div>
   );
 }
