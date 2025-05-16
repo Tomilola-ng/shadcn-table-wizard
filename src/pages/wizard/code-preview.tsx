@@ -1,14 +1,13 @@
-import { toast } from "sonner";
-
 import { CodeBlock } from "@/components/ui/code-block";
 
 import { ColumnConfig } from "@/types";
+import { _slugify } from "@/lib/utils";
 
 interface CodePreviewProps {
   columns: ColumnConfig[];
 }
 
-export function CodePreview({ columns }: CodePreviewProps) {
+export function CodePreview({ columns }: Readonly<CodePreviewProps>) {
   // Helper to generate TypeScript interfaces
   const generateTypeDefinition = (columns: ColumnConfig[]) => {
     const typeProperties = columns
@@ -34,7 +33,7 @@ export function CodePreview({ columns }: CodePreviewProps) {
             break;
         }
 
-        const cleanedLabel = col.label.toLowerCase().replace(/\s+/g, "");
+        const cleanedLabel = _slugify(col.label);
         if (col.dataType !== "action") {
           return `  ${cleanedLabel}: ${typeString};`;
         }
